@@ -4,6 +4,8 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import clerkRoutes from "./routes/ClerkRoutes.js";
+import tripRoutes from "./routes/TripRoutes.js";
+import capturesRoutes from "./routes/CapturesRoutes.js";
 import {setupSocket} from "./socket.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -24,10 +26,13 @@ app.use(cors({
     credentials: true
 }))
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/clerk", clerkRoutes) 
+app.use("/clerk", clerkRoutes);
 
 app.use(cookieParser());
 app.use(express.json());
+
+app.use("/api/trips", tripRoutes);
+app.use("/api/captures", capturesRoutes);
 
 const server = app.listen(port, () => {
     console.log(`Server is running at: http://localhost:${port}`)

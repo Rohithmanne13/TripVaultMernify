@@ -1,57 +1,120 @@
 "use client"
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useParams, usePathname } from "next/navigation";
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { navItems } from './nav_items';
+import { ArrowLeft, Luggage } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function TripLayout({ children }) {
-  const { tripId } = useParams();
+  const { tripid } = useParams();
   const pathname = usePathname();
 
   return (
-    <>
-            <div className='flex flex-col md:flex-row bg-black/50 h-screen w-full'>
-                {/* Sidebar */}
-                <div className='hidden md:flex flex-col justify-between border-r border-[#2a2a2a] items-start h-screen w-60 md:w-70'>
-                    {/* Logo */}
-                    <Link href={"/console"} className="flex items-center gap-[2px] pr-10 pl-3 pt-5 mb-6">
-                        {/* <Image src="/logo.svg" alt="TripVault" width={45} height={45} /> */}
-                        <h1 className="text-2xl font-bold text-white">Trip</h1>
-                        <h1 className="text-2xl font-bold text-purple-1">Vault</h1>
-                    </Link>
-                    {/* Navigation Items */}
-                    <div className="flex flex-col justify-between w-full p-2 h-full">
-                        <div className='flex flex-col h-full'>
-                            <ul className="flex flex-col gap-3 mr-2 ml-1 flex-1">
-                                {navItems.map((item) => {
-                                    const path = `/trip/${tripId}${item.href}`;
-                                    return (
-                                        <li key={item.name}>
-                                            <Link
-                                                href={path}
-                                                className={`flex gap-2 items-center rounded-lg p-2 transition-colors ${pathname === path
-                                                    ? "bg-purple-1"
-                                                    : "hover:bg-white/10"
-                                                    } `}
-                                            >
-                                                <item.icon size={22} className={`${pathname === path ? "invert brightness-0" : "text-purple-1"}`} />
-                                                <span className="text-white text-md font-medium">{item.name}</span>
-                                            </Link>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Main Content */}
-                <div className='flex-1 bg-dark-1'>
-                    {children}
-                </div>
+    <div className='flex flex-col md:flex-row h-screen w-full bg-background'>
+      {/* Sidebar */}
+      <aside className='hidden md:flex flex-col border-r border-border bg-card w-64 h-screen'>
+        {/* Logo & Back Button */}
+        <div className="p-6 border-b border-border">
+          <Link 
+            href="/console" 
+            className="flex items-center gap-2 mb-4 text-muted-foreground hover:text-foreground transition-colors group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm font-medium">Back to Console</span>
+          </Link>
+          <Link href="/console" className="flex items-center gap-2">
+            <Luggage className="w-7 h-7 text-primary" />
+            <div className="flex items-baseline gap-1">
+              <h1 className="text-xl font-bold text-foreground">Trip</h1>
+              <h1 className="text-xl font-bold text-primary">Vault</h1>
             </div>
-        </>
+          </Link>
+        </div>
+
+        {/* Navigation Items */}
+        <nav className="flex-1 p-4">
+          <ul className="flex flex-col gap-2">
+            {navItems.map((item) => {
+              const path = `/trip/${tripid}${item.href}`;
+              const isActive = pathname === path;
+              return (
+                <li key={item.id}>
+                  <Link
+                    href={path}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    }`}
+                  >
+                    <item.icon 
+                      size={20} 
+                      className={`${
+                        isActive 
+                          ? "text-primary-foreground" 
+                          : "text-primary group-hover:scale-110 transition-transform"
+                      }`} 
+                    />
+                    <span className="text-sm font-medium">{item.name}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
+
+        {/* Bottom Section */}
+        <div className="p-4 border-t border-border">
+          <div className="px-4 py-3 rounded-lg bg-muted/50">
+            <p className="text-xs text-muted-foreground">Trip ID</p>
+            <p className="text-sm font-mono text-foreground truncate mt-1">{tripid}</p>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Navigation */}
+      <div className="md:hidden sticky top-0 z-10 bg-card border-b border-border">
+        <div className="flex items-center justify-between p-4">
+          <Link href="/console" className="flex items-center gap-2">
+            <Luggage className="w-6 h-6 text-primary" />
+            <div className="flex items-baseline gap-1">
+              <h1 className="text-lg font-bold text-foreground">Trip</h1>
+              <h1 className="text-lg font-bold text-primary">Vault</h1>
+            </div>
+          </Link>
+          <Link href="/console">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
+          </Link>
+        </div>
+        <div className="flex overflow-x-auto px-4 pb-2 gap-2 hide-scrollbar">
+          {navItems.map((item) => {
+            const path = `/trip/${tripid}/${item.href}`;
+            const isActive = pathname === path;
+            return (
+              <Link
+                key={item.id}
+                href={path}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-accent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <item.icon size={18} />
+                <span className="text-sm font-medium">{item.name}</span>
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main className='flex-1 overflow-auto bg-background'>
+        {children}
+      </main>
+    </div>
   );
 }
