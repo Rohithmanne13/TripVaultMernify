@@ -14,10 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Event Manager",
-  // icons: {
-  //   icon: "/logo.svg",
-  // },
+  title: "Tripvault - Your Travel Companion",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({ children }) {

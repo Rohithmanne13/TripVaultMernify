@@ -24,7 +24,7 @@ export default function TripLayout({ children }) {
           </Link>
           <Link href="/console" className="flex items-center gap-2">
             <Luggage className="w-7 h-7 text-primary" />
-            <div className="flex items-baseline gap-1">
+            <div className="flex items-baseline gap">
               <h1 className="text-xl font-bold text-foreground">Trip</h1>
               <h1 className="text-xl font-bold text-primary">Vault</h1>
             </div>

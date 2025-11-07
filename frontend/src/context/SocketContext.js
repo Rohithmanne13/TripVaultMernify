@@ -15,21 +15,38 @@ export const useSocket = () => {
 export const SocketProvider = ({ children }) => {
   const socket = useRef(null);
   const [isConnected, setIsConnected] = useState(false);
-  const { getToken } = useAuth();
+  const { getToken, isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     const connectSocket = async () => {
       try {
+        // Wait for Clerk to be loaded and user to be signed in
+        if (!isLoaded || !isSignedIn) {
+          console.log("Waiting for authentication...");
+          return;
+        }
+
         if (!getToken) {
           console.error("getToken is not available");
           return;
         }
+
         console.log("Connecting socket with token...");
         socket.current = io(HOST, {
           auth: async (cb) => {
-            const freshToken = await getToken();
-            cb({ token: freshToken, type: "user" });
+            try {
+              const freshToken = await getToken();
+              if (!freshToken) {
+                console.error("Failed to get authentication token");
+                cb({ token: null, type: "user" });
+                return;
+              }
+              cb({ token: freshToken, type: "user" });
+            } catch (error) {
+              console.error("Error getting token:", error);
+              cb({ token: null, type: "user" });
+            }
           },
         });
 
@@ -40,6 +57,12 @@ export const SocketProvider = ({ children }) => {
 
         socket.current.on("disconnect", () => {
           console.log("Disconnected from socket");
+          setIsConnected(false);
+        });
+
+        socket.current.on("auth-error", (error) => {
+          console.error("Socket authentication error:", error);
+          toast.error("Authentication failed. Please refresh the page.");
           setIsConnected(false);
         });
 
@@ -65,7 +88,7 @@ export const SocketProvider = ({ children }) => {
         setIsConnected(false);
       }
     };
-  }, []);
+  }, [isLoaded, isSignedIn]);
 
   return (
     <SocketContext.Provider value={{socket, isConnected}}>

@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import clerkRoutes from "./routes/ClerkRoutes.js";
 import tripRoutes from "./routes/TripRoutes.js";
 import capturesRoutes from "./routes/CapturesRoutes.js";
+import expensesRoutes from "./routes/ExpensesRoutes.js";
+import proposalRoutes from "./routes/ProposalRoutes.js";
 import {setupSocket} from "./socket.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -33,6 +35,8 @@ app.use(express.json());
 
 app.use("/api/trips", tripRoutes);
 app.use("/api/captures", capturesRoutes);
+app.use("/api/expenses", expensesRoutes);
+app.use("/api/proposals", proposalRoutes);
 
 const server = app.listen(port, () => {
     console.log(`Server is running at: http://localhost:${port}`)

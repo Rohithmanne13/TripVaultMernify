@@ -46,11 +46,11 @@ const TripCard = ({ trip }) => {
     return (
         <>
             <Card 
-                className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group"
+                className="cursor-pointer hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] group bg-gray-90 border-gray-300"
                 onClick={handleCardClick}
             >
                 {/* Cover Image or Placeholder */}
-                <div className="relative w-full h-40 overflow-hidden rounded-t-xl bg-linear-to-br from-blue-500 via-purple-500 to-pink-500">
+                <div className="relative w-full h-40 overflow-hidden rounded-t-xl bg-linear-to-br from-blue-500 via-cyan-500 to-sky-600">
                     {trip.coverImage ? (
                         <img 
                             src={trip.coverImage} 
@@ -65,7 +65,7 @@ const TripCard = ({ trip }) => {
                     
                     {/* Role Badge */}
                     <div className="absolute top-3 right-3">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full border backdrop-blur-sm ${getRoleBadgeColor(trip.userRole)}`}>
+                        <span className={`px-3 py-1.5 text-xs font-semibold rounded-full backdrop-blur-md bg-white/95 text-gray-900 border border-white/50 shadow-lg`}>
                             {trip.userRole}
                         </span>
                     </div>
@@ -85,13 +85,13 @@ const TripCard = ({ trip }) => {
                     )}
                 </div>
 
-                <CardHeader className="pb-3">
+                <CardHeader className="pb-3 bg-white border-b border-gray-100">
                     <CardTitle className="text-xl line-clamp-1 group-hover:text-primary transition-colors">
                         {trip.tripName}
                     </CardTitle>
                 </CardHeader>
 
-                <CardContent className="space-y-3">
+                <CardContent className="space-y-3 bg-gray-50/50">
                     {/* Destination */}
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <MapPin className="w-4 h-4 shrink-0" />

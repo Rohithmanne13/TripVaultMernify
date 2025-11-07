@@ -119,7 +119,7 @@ export const createTrip = async (req, res) => {
             createdBy: userId,
             members: tripMembers,
             inviteCode,
-            budget: budget || { total: 0, currency: "USD" }
+            budget: budget || { total: 0, currency: "INR" }
         });
 
         // Populate creator and member details

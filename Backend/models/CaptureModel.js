@@ -89,5 +89,6 @@ captureSchema.methods.isLikedBy = function(userId) {
     return this.likes.some(like => like.userId === userId);
 };
 
+
 const Capture = mongoose.model("Capture", captureSchema);
 export default Capture;
