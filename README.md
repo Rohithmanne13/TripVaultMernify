@@ -1,29 +1,31 @@
-# TripVault - Group Trip Expense Management System
+# TripVault - Your All in One Travel Companion
 
-A comprehensive full-stack web application for managing group trip expenses with real-time updates, smart settlement calculations, collaborative planning features, and photo sharing capabilities to capture and share trip moments.
+TripVault is a collaborative trip and event management platform that consolidates all aspects of group travel planning into one unified workspace. From initial brainstorming to post trip memories, friends can plan itineraries, split expenses, share photos, and coordinate activities in real time eliminating the need to juggle multiple apps.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Status](https://img.shields.io/badge/status-production%20ready-success.svg)
 ![License](https://img.shields.io/badge/license-ISC-green.svg)
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
-- [Configuration](#configuration)
 - [Usage](#usage)
 - [API Documentation](#api-documentation)
 - [Authentication](#authentication)
 - [Real-time Features](#real-time-features)
-- [Database Schema](#database-schema)
-- [Deployment](#deployment)
+- [Settlement Algorithm](#settlement-algorithm)
+- [File Upload](#file-upload)
+- [Security Features](#security-features)
+- [Error Handling](#error-handling)
+- [Development Notes](#development-notes)
 - [Contributing](#contributing)
-- [Support](#support)
+- [License](#license)
 
-## 🎯 Overview
+## Overview
 
 TripVault is a modern expense management system designed for group trips. It helps users track expenses, split costs automatically, calculate settlements, manage trip-related activities collaboratively, and share memorable moments through photos and captures. Built with Next.js, Express.js, MongoDB, and Clerk authentication, it provides a seamless experience with real-time updates via Socket.io.
 
@@ -43,9 +45,9 @@ Whether you're planning a weekend getaway or an extended vacation, TripVault kee
 - ✅ **Transaction Logging** - Complete audit trail of all activities
 - ✅ **Captures & Moments** - Share photos and capture memorable trip moments with your group
 
-## 🚀 Features
+## Features
 
-### 💰 Expense Management
+### Expense Management
 - Create, read, update, and delete expenses
 - Category-based expense tracking (Food, Transport, Accommodation, Activities, Shopping, Other)
 - Split expenses among multiple trip members
@@ -54,7 +56,7 @@ Whether you're planning a weekend getaway or an extended vacation, TripVault kee
 - Per-person split amount calculation
 - Export expenses as PDF or CSV
 
-### 💸 Settlement System
+### Settlement System
 - Automatic calculation of who owes whom
 - Optimized algorithm to minimize transactions
 - Mark settlements as paid
@@ -62,15 +64,15 @@ Whether you're planning a weekend getaway or an extended vacation, TripVault kee
 - Payment QR code integration
 - Visual "from → to" representation
 
-### 📊 Analytics & Reporting
+### Analytics & Reporting
 - Budget vs Actual expenses comparison
 - Category-wise expense breakdown
 - Visual progress bars with color coding
 - Spending statistics and trends
 - Transaction log with filtering
-- Export capabilities (PDF/CSV)
+- Export capabilities (PDF)
 
-### 👥 Trip Management
+### Trip Management
 - Create and manage multiple trips
 - Add/remove trip members
 - Budget tracking and monitoring
@@ -78,14 +80,14 @@ Whether you're planning a weekend getaway or an extended vacation, TripVault kee
 - Trip details and statistics
 - Member management
 
-### 💡 Idea Board
+### Idea Board
 - Collaborative trip planning
 - Add ideas with location, time, and tags
 - Search and filter ideas
 - Delete ideas
-- Trip-specific idea management
+- Trip specific idea management
 
-### 📸 Captures & Moments
+### Captures & Moments
 - Share photos and moments from your trip
 - Upload multiple images per capture
 - Add captions and descriptions
@@ -95,30 +97,30 @@ Whether you're planning a weekend getaway or an extended vacation, TripVault kee
 - Real-time updates when new captures are added
 - Filter captures by date or location
 
-### 🔐 User Management
+### User Management
 - Clerk authentication integration
 - User profile management
 - Payment QR code upload
 - Profile picture support
 - Secure session management
 
-### ⚡ Real-time Features
+### Real-time Features
 - Live expense updates
-- Real-time settlement changes
+- Real time settlement changes
 - Instant payment notifications
 - Live capture sharing and updates
-- Socket.io-based communication
-- Room-based messaging per trip
-- Real-time notifications for new captures, likes, and comments
+- Socket.io based communication
+- Room based messaging per trip
+- Real time notifications for new captures, likes, and comments
 
-### 📝 Transaction Logging
+### Transaction Logging
 - Complete audit trail
 - Activity type filtering
 - User attribution
 - Timestamp tracking
 - Statistics and analytics
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework**: Next.js 16.0.1
@@ -140,7 +142,6 @@ Whether you're planning a weekend getaway or an extended vacation, TripVault kee
 - **Real-time**: Socket.io 4.8.1
 - **File Upload**: Multer
 - **Export**: PDFKit, json2csv
-- **Environment**: dotenv
 
 ### DevOps & Tools
 - **Version Control**: Git
@@ -225,7 +226,7 @@ TripVault/
 └── README.md                         # This file
 ```
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
@@ -237,8 +238,8 @@ TripVault/
 ### Step 1: Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd TripVault
+git clone https://github.com/tatwik-sai/TripVaultMernify.git
+cd TripVaultMernify
 ```
 
 ### Step 2: Backend Setup
@@ -251,10 +252,12 @@ npm install
 Create a `.env` file in the `Backend` directory:
 
 ```env
-PORT=3001
-DATABASE_URL=mongodb://localhost:27017/tripvault
-ORIGIN=http://localhost:3000
-CLERK_SECRET_KEY=your_clerk_secret_key_here
+DATABASE_URL=your_mongodb_url
+PORT=8747
+ORIGIN=your_frontend_arigin
+CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+CLERK_WEBHOOK_SIGNING_SECRET=your_clerk_signing_secret
 ```
 
 Create the uploads directory:
@@ -282,7 +285,6 @@ Start the backend server:
 node index.js
 ```
 
-The backend will start on `http://localhost:3001`
 
 ### Step 3: Frontend Setup
 
@@ -294,9 +296,30 @@ npm install
 Create a `.env.local` file in the `frontend` directory:
 
 ```env
+# Clerk Authentication (Replace with your own keys)
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 CLERK_SECRET_KEY=your_clerk_secret_key
-NEXT_PUBLIC_API_URL=http://localhost:3001
+
+# Clerk Auth Routes
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/console
+NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/console
+
+# Server URL
+NEXT_PUBLIC_SERVER_URL=http://localhost:8747
+
+# Project Links
+NEXT_PUBLIC_GITHUB_URL=https://github.com/your-username/your-repository
+NEXT_PUBLIC_REPOSITORY_URL=https://github.com/your-username/your-repository
+
+# Contact Info (Optional)
+NEXT_PUBLIC_MAIL_URL=mailto:contact@example.com
+NEXT_PUBLIC_PHONE_URL=tel:+1234567890
+
+# Demo URL (Optional)
+NEXT_PUBLIC_DEMO_URL=https://www.youtube.com/watch?v=your-demo-link
+
 ```
 
 Update `frontend/src/utils/constants.js` to set the API host:
@@ -313,36 +336,26 @@ npm run dev
 
 The frontend will start on `http://localhost:3000`
 
-### Step 4: Clerk Configuration
+#### Ngrok Setup
+   - Create an account and download [Ngrok](https://ngrok.com/)
+   - Open cmd and run the following commands (Get the credentials from website)
+  
+      ```bash
+      ngrok config add-authtoken <YOUR_AUTH_TOKEN>
+      ```
+    - Choose the Static Domain and run the command
 
-1. Create a Clerk account at [clerk.com](https://clerk.com)
-2. Create a new application
-3. Get your API keys:
-   - Publishable Key
-   - Secret Key
-4. Configure webhook endpoint:
-   - URL: `http://localhost:3001/clerk/on-signup`
-   - Events: `user.created`, `user.updated`, `user.deleted`
-5. Add the keys to your `.env` files
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-#### Backend (.env)
-```env
-PORT=3001                                    # Server port
-DATABASE_URL=mongodb://localhost:27017/tripvault  # MongoDB connection string
-ORIGIN=http://localhost:3000                 # Frontend origin for CORS
-CLERK_SECRET_KEY=sk_test_...                 # Clerk secret key
-```
-
-#### Frontend (.env.local)
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...  # Clerk publishable key
-CLERK_SECRET_KEY=sk_test_...                   # Clerk secret key
-NEXT_PUBLIC_API_URL=http://localhost:3001      # Backend API URL
-```
+      ```bash
+      ngrok http --url=<YOUR_STATIC_URL> 8747
+      ```
+    
+#### Clerk Setup
+   - Create an account on [Clerk](https://clerk.com/)
+    - Create a new application with email and google enabled
+    - Copy and store the PUBLIC and SECRET key
+    - Go to **Configure** > **Webhooks** 
+    - Add a new endpoint with ngrok static url subscribe to user events and create.
+    - Copy the **Signing Secret** provided.
 
 ### MongoDB Connection
 
@@ -356,22 +369,7 @@ For **MongoDB Atlas**:
 DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/tripvault
 ```
 
-## 📖 Usage
-
-### Starting the Application
-
-1. **Start MongoDB** (if using local instance)
-2. **Start Backend Server**:
-   ```bash
-   cd Backend
-   node index.js
-   ```
-3. **Start Frontend Server**:
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-4. **Open Browser**: Navigate to `http://localhost:3000`
+## Usage
 
 ### Creating Your First Trip
 
@@ -410,11 +408,7 @@ DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/tripvault
 
 1. Navigate to a trip's Details page
 2. Click "Add Idea"
-3. Fill in idea details:
-   - Description
-   - Location
-   - Time
-   - Tags (comma-separated)
+3. Fill in idea details
 4. Search and filter ideas
 5. Delete ideas as needed
 
@@ -431,7 +425,7 @@ DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/tripvault
 9. Filter captures by date or location
 10. Real-time updates when new captures are added by any member
 
-## 📡 API Documentation
+## API Documentation
 
 ### Base URL
 ```
@@ -490,14 +484,12 @@ Authorization: Bearer <clerk-jwt-token>
 - `POST /api/trips/:tripId/captures/:captureId/like` - Like a capture
 - `POST /api/trips/:tripId/captures/:captureId/comment` - Add comment to capture
 
-For complete API documentation, see [Backend/API_DOCUMENTATION.md](./Backend/API_DOCUMENTATION.md)
-
-## 🔐 Authentication
+## Authentication
 
 TripVault uses **Clerk** for authentication. The system supports:
 
 - **Email/Password** authentication
-- **Social OAuth** (Google, GitHub, etc.)
+- **Social OAuth** (Google)
 - **JWT Token** validation
 - **Webhook Integration** for user sync
 
@@ -513,22 +505,11 @@ TripVault uses **Clerk** for authentication. The system supports:
 
 All routes except `/` and `/sign-in`, `/sign-up` are protected by Clerk middleware.
 
-## 🔄 Real-time Features
+## Real-time Features
 
 TripVault uses **Socket.io** for real-time updates:
 
 ### Socket Events
-
-#### Client Connection
-```javascript
-const socket = io('http://localhost:3001', {
-  auth: {
-    token: '<clerk-jwt-token>',
-    type: 'web',
-    tripId: '<trip-id>'
-  }
-});
-```
 
 #### Server Events
 - `expense-added` - New expense created
@@ -550,127 +531,7 @@ All users in a trip receive instant updates when:
 - New captures are shared
 - Captures receive likes or comments
 
-## 🗄️ Database Schema
-
-### User
-```javascript
-{
-  _id: String (Clerk User ID),
-  email: String,
-  firstName: String,
-  lastName: String,
-  imageUrl: String,
-  paymentQRCode: String
-}
-```
-
-### Trip
-```javascript
-{
-  _id: ObjectId,
-  name: String,
-  description: String,
-  destination: String,
-  budget: Number,
-  admin: String (userId),
-  members: [{
-    userId: String,
-    name: String,
-    email: String,
-    role: String,
-    joinedAt: Date
-  }],
-  startDate: Date,
-  endDate: Date,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Expense
-```javascript
-{
-  _id: ObjectId,
-  tripId: ObjectId,
-  amount: Number,
-  description: String,
-  category: String,
-  date: Date,
-  paidBy: String (userId),
-  splitAmong: [String],
-  receipt: String (file path),
-  addedBy: String (userId),
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Settlement
-```javascript
-{
-  _id: ObjectId,
-  tripId: ObjectId,
-  from: String (userId),
-  to: String (userId),
-  amount: Number,
-  isPaid: Boolean,
-  paidAt: Date,
-  details: {
-    expenseCount: Number,
-    expenseIds: [ObjectId]
-  },
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### TransactionLog
-```javascript
-{
-  _id: ObjectId,
-  tripId: ObjectId,
-  type: String,
-  user: String (userId),
-  data: Mixed,
-  timestamp: Date
-}
-```
-
-### Idea
-```javascript
-{
-  _id: ObjectId,
-  description: String,
-  userName: String,
-  time: String,
-  location: String,
-  tags: [String]
-}
-```
-
-### Capture
-```javascript
-{
-  _id: ObjectId,
-  tripId: ObjectId,
-  userId: String,
-  images: [String],
-  caption: String,
-  description: String,
-  location: String,
-  date: Date,
-  likes: [String],
-  comments: [{
-    userId: String,
-    text: String,
-    createdAt: Date
-  }],
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-## 🧮 Settlement Algorithm
+## Settlement Algorithm
 
 The backend uses an optimized greedy algorithm to calculate settlements:
 
@@ -683,7 +544,7 @@ The backend uses an optimized greedy algorithm to calculate settlements:
 
 This minimizes the number of transactions needed for settlement.
 
-## 📤 File Upload
+## File Upload
 
 ### Configuration
 - **Max Size**: 5MB
@@ -700,100 +561,7 @@ This minimizes the number of transactions needed for settlement.
 http://localhost:3001/uploads/{filename}
 ```
 
-## 📊 Export Features
-
-### CSV Export
-Returns a CSV file with columns:
-- Date
-- Description
-- Category
-- Amount
-- Paid By
-- Split Among
-
-### PDF Export
-Generates a formatted PDF report with:
-- Trip name
-- Total expenses
-- Expense count
-- Detailed expense list
-- Generation date
-
-## 🚀 Deployment
-
-### Production Environment Variables
-
-#### Backend
-```env
-PORT=3001
-DATABASE_URL=mongodb+srv://user:pass@cluster.mongodb.net/tripvault
-ORIGIN=https://your-frontend-domain.com
-CLERK_SECRET_KEY=sk_live_...
-NODE_ENV=production
-```
-
-#### Frontend
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_...
-CLERK_SECRET_KEY=sk_live_...
-NEXT_PUBLIC_API_URL=https://your-backend-domain.com
-```
-
-### Deployment Recommendations
-
-#### Backend
-- Use **MongoDB Atlas** for database
-- Use **AWS S3** or similar for file storage
-- Use **PM2** for process management
-- Enable **HTTPS**
-- Set up **proper logging**
-- Configure **rate limiting**
-- Enable **compression**
-
-#### Frontend
-- Deploy on **Vercel** (recommended for Next.js)
-- Or use **Netlify**, **AWS Amplify**, etc.
-- Enable **environment variables**
-- Set up **custom domain**
-- Enable **HTTPS**
-
-### Docker Deployment (Optional)
-
-Create a `docker-compose.yml`:
-
-```yaml
-version: '3.8'
-services:
-  backend:
-    build: ./Backend
-    ports:
-      - "3001:3001"
-    environment:
-      - DATABASE_URL=mongodb://mongo:27017/tripvault
-      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
-    depends_on:
-      - mongo
-  
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
-      - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${CLERK_PUBLISHABLE_KEY}
-  
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
-volumes:
-  mongo-data:
-```
-
-## 🔒 Security Features
+## Security Features
 
 - ✅ Clerk JWT authentication
 - ✅ User authorization checks
@@ -806,27 +574,7 @@ volumes:
 - ✅ XSS protection
 - ✅ Secure file storage
 
-## 🧪 Testing
-
-### Test Expense Creation
-```bash
-curl -X POST http://localhost:3001/api/trips/TRIP_ID/expenses \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -F "amount=1500" \
-  -F "description=Dinner" \
-  -F "category=food" \
-  -F "paidBy=USER_ID" \
-  -F "splitAmong=[\"USER_ID1\",\"USER_ID2\"]" \
-  -F "receipt=@path/to/image.jpg"
-```
-
-### Test Settlement Calculation
-```bash
-curl http://localhost:3001/api/trips/TRIP_ID/settlements \
-  -H "Authorization: Bearer YOUR_TOKEN"
-```
-
-## 🐛 Error Handling
+## Error Handling
 
 All endpoints return consistent error responses:
 
@@ -845,7 +593,7 @@ All endpoints return consistent error responses:
 - `404` - Not Found
 - `500` - Server Error
 
-## 📝 Development Notes
+## Development Notes
 
 ### Adding New Features
 
@@ -864,7 +612,7 @@ The models include optimized indexes for:
 - Settlement queries by trip and status
 - Transaction log queries by trip and timestamp
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -872,58 +620,12 @@ The models include optimized indexes for:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📞 Support
 
-For issues or questions:
-1. Check [Backend/API_DOCUMENTATION.md](./Backend/API_DOCUMENTATION.md)
-2. Review error logs
-3. Verify environment variables
-4. Check MongoDB connection
-5. Verify Clerk configuration
+## Ready to Use!
 
-## ✅ Feature Checklist
+TripVault is fully implemented and production ready. All features are functional with proper authentication, real-time updates, and data persistence.
 
-### Backend
-- [x] MongoDB models created
-- [x] Controllers implemented
-- [x] Routes configured
-- [x] Authentication middleware
-- [x] File upload middleware
-- [x] Socket.io integration
-- [x] Settlement algorithm
-- [x] Export functionality (PDF/CSV)
-- [x] Transaction logging
-- [x] Error handling
-- [x] API documentation
-- [x] Clerk webhook integration
-- [x] Idea board API
-- [x] Captures/Moments API
-
-### Frontend
-- [x] Authentication pages
-- [x] Console/Dashboard page
-- [x] Expenses page
-- [x] Settlement calculations
-- [x] Analytics dashboard
-- [x] Transaction log
-- [x] Idea board
-- [x] Real-time updates
-- [x] File uploads
-- [x] Export functionality
-- [x] Responsive design
-- [x] Error handling
-- [x] Loading states
-- [x] Captures/Moments page
-
-## 🎉 Ready to Use!
-
-TripVault is fully implemented and production-ready. All features are functional with proper authentication, real-time updates, and data persistence.
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
-
-
-For detailed backend documentation, see [Backend/README.md](./Backend/README.md)  
-For API documentation, see [Backend/API_DOCUMENTATION.md](./Backend/API_DOCUMENTATION.md)
 
