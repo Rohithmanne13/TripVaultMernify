@@ -7,7 +7,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "node index.js",
+    "test": "node tests/basic.test.js",
+    "lint": "echo \"Checking for console.logs...\" && (grep -r \"console.log\" --include=\"*.js\" . && exit 0 || echo \"No console.logs found\")",
+    "audit": "npm audit"
   },
   "dependencies": {
     "@clerk/backend": "^2.20.0",

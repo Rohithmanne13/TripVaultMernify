@@ -1,0 +1,20 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for sensitive files
+        run: |
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E "\.env$|\.env\.local$|secrets"; then
+            echo "Error: Sensitive files detected in PR"
+            exit 1
+          fi
