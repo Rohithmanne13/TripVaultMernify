@@ -227,7 +227,7 @@ export function BalanceSettlementCard({ balance, tripId, formatCurrency }) {
                                     <Settings className="w-8 h-8 text-gray-400" />
                                 </div>
                                 <div className="text-muted-foreground mb-2">
-                                    {otherUser.firstName} hasn't set up payment details yet
+                                    {otherUser.firstName} hasn&apos;t set up payment details yet
                                 </div>
                                 <div className="text-xs text-muted-foreground">
                                     They need to add their UPI ID or QR code in Payment Settings

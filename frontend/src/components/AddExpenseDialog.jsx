@@ -46,7 +46,8 @@ export function AddExpenseDialog({ tripId, open, onOpenChange }) {
                 percentage: equalPercentage
             }));
             console.log("Initial splits:", initialSplits);
-            setSplits(initialSplits);
+            // Defer state update to avoid synchronous setState in effect
+            setTimeout(() => setSplits(initialSplits), 0);
         } else if (open) {
             console.log("No trip members available:", currentTrip);
         }

@@ -85,7 +85,7 @@ export default function HeroPage() {
           {/* Quote */}
           <div className="mb-10">
             <p className="text-lg md:text-xl text-gray-600 italic font-light">
-              "The journey of a thousand miles begins with a single step."
+              &ldquo;The journey of a thousand miles begins with a single step.&rdquo;
             </p>
             <p className="text-xs text-gray-500 mt-2">— Lao Tzu</p>
           </div>

@@ -37,12 +37,6 @@ export default function ExpensesPage() {
 
     const { currentTrip, fetchTripById } = useTripStore();
 
-    useEffect(() => {
-        if (tripid) {
-            loadExpenseData();
-        }
-    }, [tripid]);
-
     const loadExpenseData = async () => {
         try {
             const token = await getToken();
@@ -60,6 +54,12 @@ export default function ExpensesPage() {
             toast.error("Failed to load expense data");
         }
     };
+
+    useEffect(() => {
+        if (tripid) {
+            loadExpenseData();
+        }
+    }, [tripid, loadExpenseData]);
 
     const handleCategoryFilter = async (category) => {
         const newCategory = categoryFilter === category ? null : category;
