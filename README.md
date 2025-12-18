@@ -621,7 +621,3 @@ The models include optimized indexes for:
 
 TripVault is fully implemented and production ready. All features are functional with proper authentication, real-time updates, and data persistence.
 
-## License
-
-This project is licensed under the MIT License.
-
