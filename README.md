@@ -2,10 +2,6 @@
 
 TripVault is a collaborative trip and event management platform that consolidates all aspects of group travel planning into one unified workspace. From initial brainstorming to post trip memories, friends can plan itineraries, split expenses, share photos, and coordinate activities in real time eliminating the need to juggle multiple apps.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![Status](https://img.shields.io/badge/status-production%20ready-success.svg)
-![License](https://img.shields.io/badge/license-ISC-green.svg)
-
 ## Table of Contents
 
 - [Overview](#overview)
